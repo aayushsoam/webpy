@@ -151,71 +151,39 @@ plt.get_fignums() if 'plt' in globals() else []
         const fileCheck = await pyodide.runPython(`
 import os
 import base64
-import time
 
 generated_files = []
-
-# Wait a moment for file writing to complete
-time.sleep(0.1)
-
 try:
-    current_dir = '.'
-    all_files = os.listdir(current_dir)
-    print(f"All files in directory: {all_files}")
-    
-    for file in all_files:
+    files = os.listdir('.')
+    for file in files:
         if file.endswith(('.pdf', '.txt', '.csv', '.json', '.xlsx', '.docx')):
-            file_path = os.path.join(current_dir, file)
             try:
-                # Check if file exists and has content
-                if os.path.exists(file_path):
-                    file_size = os.path.getsize(file_path)
-                    print(f"Checking file: {file}, size: {file_size} bytes")
-                    
-                    if file_size > 0:
-                        with open(file_path, 'rb') as f:
-                            content = f.read()
-                            if content:  # Double check content exists
-                                base64_content = base64.b64encode(content).decode()
-                                file_type = file.split('.')[-1].lower()
-                                generated_files.append({
-                                    'name': file, 
-                                    'content': base64_content, 
-                                    'type': file_type,
-                                    'size': file_size
-                                })
-                                print(f"Successfully processed file: {file} ({file_size} bytes)")
-                            else:
-                                print(f"File {file} is empty after reading")
-                    else:
-                        print(f"File {file} has 0 bytes")
-                else:
-                    print(f"File {file} does not exist")
+                file_size = os.path.getsize(file)
+                if file_size > 0:  # Only include non-empty files
+                    with open(file, 'rb') as f:
+                        content = base64.b64encode(f.read()).decode()
+                        file_type = file.split('.')[-1].lower()
+                        generated_files.append({
+                            'name': file, 
+                            'content': content, 
+                            'type': file_type,
+                            'size': file_size
+                        })
+                        print(f"Found file: {file} ({file_size} bytes)")
             except Exception as e:
-                print(f"Error processing file {file}: {str(e)}")
-                import traceback
-                print(f"Traceback: {traceback.format_exc()}")
+                print(f"Error reading file {file}: {e}")
 except Exception as e:
-    print(f"Error listing directory: {str(e)}")
-    import traceback
-    print(f"Traceback: {traceback.format_exc()}")
-
-print(f"Total generated files found: {len(generated_files)}")
-for f in generated_files:
-    print(f"File: {f['name']}, Type: {f['type']}, Size: {f['size']}")
+    print(f"Error listing directory: {e}")
 
 generated_files
         `)
         
         if (fileCheck && fileCheck.length > 0) {
           setGeneratedFiles(fileCheck)
-          setOutput(prev => prev + `\n✅ Found ${fileCheck.length} generated file(s)`)
-        } else {
-          setOutput(prev => prev + `\n⚠️ No files detected or files are empty`)
+          setOutput(prev => prev + `\nFound ${fileCheck.length} generated file(s)`)
         }
       } catch (fileError) {
         console.error('File detection error:', fileError)
-        setOutput(prev => prev + `\n❌ Error detecting files: ${fileError}`)
       }
 
     } catch (error) {
@@ -380,22 +348,9 @@ print("📊 Average Revenue: $" + avg_revenue + "M")
 plt.tight_layout()
 plt.show()`,
       'pdf': `# ✅ PDF Report Generator (Updated with latest FPDF2 syntax)
-import os
+from fpdf import FPDF
+from fpdf.enums import XPos, YPos
 import datetime
-print("Starting PDF generation...")
-
-try:
-    from fpdf import FPDF
-    from fpdf.enums import XPos, YPos
-    print("FPDF imported successfully")
-except ImportError as e:
-    print(f"Error importing FPDF: {e}")
-    print("Installing fpdf2...")
-    import micropip
-    await micropip.install('fpdf2')
-    from fpdf import FPDF
-    from fpdf.enums import XPos, YPos
-    print("FPDF installed and imported successfully")
 
 # ✅ Create PDF class with custom styling
 class BusinessReportPDF(FPDF):
@@ -571,38 +526,17 @@ footer_text = "This report is generated automatically from business analytics da
 pdf.multi_cell(0, 5, footer_text)
 
 # ✅ Save PDF
-filename = "business_analytics_report.pdf"
-pdf.output(filename)
+pdf.output("business_analytics_report.pdf")
 
-# ✅ Verify file was created
-if os.path.exists(filename):
-    file_size = os.path.getsize(filename)
-    print(f"✅ PDF Report Generated Successfully!")
-    print(f"📁 Filename: {filename}")
-    print(f"📊 File size: {file_size} bytes")
-    
-    # Test reading the file
-    try:
-        with open(filename, 'rb') as test_file:
-            content = test_file.read()
-            if len(content) > 0:
-                print(f"✅ File content verified: {len(content)} bytes")
-            else:
-                print("⚠️ Warning: File appears to be empty")
-    except Exception as read_error:
-        print(f"❌ Error reading generated file: {read_error}")
-    
-    print("\\n📋 Report includes:")
-    print("   • Executive Summary")
-    print("   • Key Financial Metrics") 
-    print("   • Quarterly Revenue Breakdown")
-    print("   • Sector Profit Analysis")
-    print("   • Strategic Recommendations")
-    print("\\n🎉 Your professional business report is ready for download!")
-else:
-    print("❌ Error: PDF file was not created")
-    print("Current directory contents:")
-    print(os.listdir('.'))`
+print("PDF Report Generated Successfully!")
+print("Filename: business_analytics_report.pdf")
+print("Report includes:")
+print("   Executive Summary")
+print("   Key Financial Metrics") 
+print("   Quarterly Revenue Breakdown")
+print("   Sector Profit Analysis")
+print("   Strategic Recommendations")
+print("\\nYour professional business report is ready!")`
     }
 
     setCode(examples[type] || '')
@@ -611,22 +545,8 @@ else:
   // File download function
   const downloadFile = (file: {name: string, content: string, type: string}) => {
     try {
-      console.log('Attempting to download file:', file.name)
-      console.log('File type:', file.type)
-      console.log('Content length:', file.content ? file.content.length : 0)
-
-      if (!file.content || file.content.length === 0) {
-        alert(`File content is empty for ${file.name}`)
-        setOutput(prev => prev + `\n❌ Cannot download ${file.name}: File content is empty`)
-        return
-      }
-
-      // Test if base64 content is valid
-      try {
-        const testDecode = atob(file.content.substring(0, 100)) // Test first 100 chars
-      } catch (base64Error) {
-        alert(`Invalid file encoding for ${file.name}`)
-        setOutput(prev => prev + `\n❌ Cannot download ${file.name}: Invalid file encoding`)
+      if (!file.content) {
+        alert('File content is empty')
         return
       }
 
@@ -650,14 +570,6 @@ else:
         type: mimeTypes[file.type] || 'application/octet-stream' 
       })
 
-      console.log('Blob created, size:', blob.size)
-
-      if (blob.size === 0) {
-        alert(`Generated file ${file.name} is empty`)
-        setOutput(prev => prev + `\n❌ Cannot download ${file.name}: Generated file is empty`)
-        return
-      }
-
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
@@ -672,11 +584,10 @@ else:
         window.URL.revokeObjectURL(url)
       }, 100)
       
-      setOutput(prev => prev + `\n✅ Downloaded: ${file.name} (${blob.size} bytes)`)
+      setOutput(prev => prev + `\nDownloaded: ${file.name}`)
     } catch (error) {
       console.error('Error downloading file:', error)
       alert(`Error downloading ${file.name}: ${error}`)
-      setOutput(prev => prev + `\n❌ Download error for ${file.name}: ${error}`)
     }
   }
 
