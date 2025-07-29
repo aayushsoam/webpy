@@ -299,7 +299,196 @@ print("💰 Total Revenue: $" + total_revenue + "M")
 print("📊 Average Revenue: $" + avg_revenue + "M")
 
 plt.tight_layout()
-plt.show()`
+plt.show()`,
+      'pdf': `# ✅ PDF Report Generator
+from fpdf import FPDF
+import datetime
+
+# ✅ Create PDF class with custom styling
+class BusinessReportPDF(FPDF):
+    def header(self):
+        # Logo/Header section
+        self.set_font('Arial', 'B', 16)
+        self.set_text_color(44, 62, 80)
+        self.cell(0, 15, '📊 BUSINESS ANALYTICS REPORT', ln=True, align='C')
+        
+        # Date
+        self.set_font('Arial', 'I', 10)
+        self.set_text_color(100, 100, 100)
+        today = datetime.datetime.now().strftime("%B %d, %Y")
+        self.cell(0, 8, f'Generated on: {today}', ln=True, align='C')
+        self.ln(5)
+        
+        # Horizontal line
+        self.set_draw_color(52, 152, 219)
+        self.line(20, self.get_y(), 190, self.get_y())
+        self.ln(10)
+
+    def footer(self):
+        self.set_y(-15)
+        self.set_font('Arial', 'I', 8)
+        self.set_text_color(100, 100, 100)
+        self.cell(0, 10, f'Page {self.page_no()} | Confidential Business Report', align='C')
+
+    def add_section_title(self, title):
+        self.set_font('Arial', 'B', 14)
+        self.set_text_color(44, 62, 80)
+        self.cell(0, 12, title, ln=True)
+        self.ln(3)
+
+    def add_metric_box(self, label, value, color_r=52, color_g=152, color_b=219):
+        # Save current position
+        x = self.get_x()
+        y = self.get_y()
+        
+        # Draw colored box
+        self.set_fill_color(color_r, color_g, color_b)
+        self.rect(x, y, 85, 25, 'F')
+        
+        # Add white text
+        self.set_text_color(255, 255, 255)
+        self.set_font('Arial', 'B', 10)
+        self.set_xy(x + 5, y + 5)
+        self.cell(0, 5, label, ln=True)
+        
+        self.set_font('Arial', 'B', 16)
+        self.set_xy(x + 5, y + 12)
+        self.cell(0, 8, value, ln=True)
+        
+        # Reset text color
+        self.set_text_color(0, 0, 0)
+        return 90  # Width + margin
+
+# ✅ Generate sample business data
+import random
+random.seed(42)
+
+revenue_data = {
+    'Q1': 1250000,
+    'Q2': 1450000, 
+    'Q3': 1680000,
+    'Q4': 1920000
+}
+
+profit_margins = {
+    'Technology': 28.5,
+    'Healthcare': 22.3,
+    'Finance': 31.2,
+    'Education': 18.7,
+    'Retail': 15.4
+}
+
+# ✅ Create PDF Report
+pdf = BusinessReportPDF()
+pdf.set_auto_page_break(auto=True, margin=15)
+pdf.add_page()
+
+# ✅ Executive Summary Section
+pdf.add_section_title('📈 EXECUTIVE SUMMARY')
+pdf.set_font('Arial', size=11)
+pdf.set_text_color(60, 60, 60)
+
+summary_text = """Our business analytics reveal strong performance across all quarters with consistent growth. 
+Key highlights include a 53.6% revenue increase from Q1 to Q4, improved profit margins in 
+technology and finance sectors, and successful market expansion initiatives."""
+
+pdf.multi_cell(0, 8, summary_text)
+pdf.ln(8)
+
+# ✅ Key Metrics Section
+pdf.add_section_title('💰 KEY FINANCIAL METRICS')
+
+# Calculate totals
+total_revenue = sum(revenue_data.values())
+avg_margin = sum(profit_margins.values()) / len(profit_margins)
+growth_rate = ((revenue_data['Q4'] - revenue_data['Q1']) / revenue_data['Q1']) * 100
+
+# Add metric boxes in a 2x2 grid
+start_x = pdf.get_x()
+start_y = pdf.get_y()
+
+pdf.set_xy(start_x, start_y)
+pdf.add_metric_box('Total Revenue', f'${total_revenue:,.0f}', 52, 152, 219)
+
+pdf.set_xy(start_x + 95, start_y)
+pdf.add_metric_box('Growth Rate', f'{growth_rate:.1f}%', 46, 204, 113)
+
+pdf.set_xy(start_x, start_y + 30)
+pdf.add_metric_box('Avg Profit Margin', f'{avg_margin:.1f}%', 155, 89, 182)
+
+pdf.set_xy(start_x + 95, start_y + 30)
+pdf.add_metric_box('Best Quarter', 'Q4 2024', 231, 76, 60)
+
+pdf.ln(65)
+
+# ✅ Quarterly Performance Section
+pdf.add_section_title('📊 QUARTERLY REVENUE BREAKDOWN')
+
+for quarter, revenue in revenue_data.items():
+    percentage = (revenue / total_revenue) * 100
+    pdf.set_font('Arial', size=11)
+    pdf.cell(40, 8, f'{quarter}:', ln=False)
+    pdf.cell(60, 8, f'${revenue:,}', ln=False)
+    pdf.cell(0, 8, f'({percentage:.1f}% of total)', ln=True)
+
+pdf.ln(5)
+
+# ✅ Sector Analysis Section
+pdf.add_section_title('🏢 PROFIT MARGIN BY SECTOR')
+
+for sector, margin in profit_margins.items():
+    pdf.set_font('Arial', size=11)
+    
+    # Sector name
+    pdf.cell(60, 8, f'{sector}:', ln=False)
+    
+    # Progress bar effect
+    pdf.set_fill_color(52, 152, 219)
+    bar_width = (margin / 35) * 80  # Scale to max width of 80
+    pdf.rect(pdf.get_x(), pdf.get_y() + 2, bar_width, 4, 'F')
+    
+    # Percentage
+    pdf.cell(90, 8, '', ln=False)  # Space for bar
+    pdf.cell(0, 8, f'{margin}%', ln=True)
+
+pdf.ln(8)
+
+# ✅ Recommendations Section
+pdf.add_section_title('🎯 STRATEGIC RECOMMENDATIONS')
+
+recommendations = [
+    "• Continue investing in Technology and Finance sectors (highest margins)",
+    "• Develop growth strategies for Education and Retail sectors", 
+    "• Maintain Q4 momentum into next fiscal year",
+    "• Consider expanding high-performing product lines",
+    "• Implement cost optimization in lower-margin sectors"
+]
+
+pdf.set_font('Arial', size=11)
+for rec in recommendations:
+    pdf.multi_cell(0, 7, rec)
+
+pdf.ln(5)
+
+# ✅ Footer note
+pdf.set_font('Arial', 'I', 9)
+pdf.set_text_color(100, 100, 100)
+pdf.multi_cell(0, 6, 
+    "This report is generated automatically from business analytics data. "
+    "For detailed analysis and custom reports, contact the analytics team.")
+
+# ✅ Save PDF
+pdf.output("business_analytics_report.pdf")
+
+print("✅ PDF Report Generated Successfully!")
+print("📄 Filename: business_analytics_report.pdf")
+print("📊 Report includes:")
+print("   • Executive Summary")
+print("   • Key Financial Metrics") 
+print("   • Quarterly Revenue Breakdown")
+print("   • Sector Profit Analysis")
+print("   • Strategic Recommendations")
+print("\\n🎉 Your professional business report is ready!")`
     }
 
     setCode(examples[type] || '')
@@ -381,23 +570,52 @@ plt.show()`
           <button onClick={() => loadExample('numpy')} className="example-btn">NumPy Array</button>
           <button onClick={() => loadExample('pandas')} className="example-btn">Pandas DataFrame</button>
           <button onClick={() => loadExample('analytics')} className="example-btn">Business Analytics</button>
+          <button onClick={() => loadExample('pdf')} className="example-btn">PDF Report Generator</button>
         </div>
          {/* Package Installation Section */}
          <div className="package-installer">
-          <h3>Install Package:</h3>
-          <input
-            type="text"
-            placeholder="Enter package name"
-            value={packageName}
-            onChange={(e) => setPackageName(e.target.value)}
-            disabled={isInstalling}
-          />
-          <button
-            onClick={installPackage}
-            disabled={isInstalling || !pyodideRef.current}
-          >
-            {isInstalling ? '⏳ Installing...' : 'Install'}
-          </button>
+          <h3>📦 Install Python Packages</h3>
+          
+          <div className="package-suggestions">
+            <h4>🔥 Popular Pyodide-Compatible Packages:</h4>
+            <div className="suggestion-buttons">
+              <button className="suggestion-btn" onClick={() => setPackageName('fpdf2')}>fpdf2 (PDF)</button>
+              <button className="suggestion-btn" onClick={() => setPackageName('requests')}>requests</button>
+              <button className="suggestion-btn" onClick={() => setPackageName('beautifulsoup4')}>beautifulsoup4</button>
+              <button className="suggestion-btn" onClick={() => setPackageName('pillow')}>pillow (Images)</button>
+              <button className="suggestion-btn" onClick={() => setPackageName('plotly')}>plotly</button>
+              <button className="suggestion-btn" onClick={() => setPackageName('seaborn')}>seaborn</button>
+              <button className="suggestion-btn" onClick={() => setPackageName('scipy')}>scipy</button>
+              <button className="suggestion-btn" onClick={() => setPackageName('sympy')}>sympy</button>
+              <button className="suggestion-btn" onClick={() => setPackageName('scikit-learn')}>scikit-learn</button>
+            </div>
+          </div>
+
+          <div className="package-input-section">
+            <input
+              type="text"
+              placeholder="Enter package name (e.g., fpdf2)"
+              value={packageName}
+              onChange={(e) => setPackageName(e.target.value)}
+              disabled={isInstalling}
+              style={{flex: 1, padding: '8px 12px', borderRadius: '4px', border: '1px solid #ddd'}}
+            />
+            <button
+              onClick={installPackage}
+              disabled={isInstalling || !pyodideRef.current}
+              style={{padding: '8px 16px'}}
+            >
+              {isInstalling ? '⏳ Installing...' : '📥 Install'}
+            </button>
+          </div>
+
+          <div className="package-note">
+            <p>
+              <strong>💡 Note:</strong> Only Pyodide-compatible packages work in browser. 
+              Popular choices: fpdf2 (PDF generation), requests (HTTP), beautifulsoup4 (web scraping), 
+              plotly (interactive charts), scikit-learn (ML).
+            </p>
+          </div>
         </div>
 
         <div className="output-section">
