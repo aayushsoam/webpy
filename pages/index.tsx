@@ -283,7 +283,7 @@ for _, row in latest_data.iterrows():
     
 print(f"\\n🏆 Top Performer: {latest_data.loc[latest_data['Revenue'].idxmax(), 'Category']}")
 print(f"💰 Total Revenue: ${latest_data['Revenue'].sum()}M")
-print(f"📊 Average Revenue: ${latest_data['Revenue'].mean():.1f}M")
+print(f"📊 Average Revenue: {latest_data['Revenue'].mean():.1f}M")
 
 plt.tight_layout()
 plt.show()`
