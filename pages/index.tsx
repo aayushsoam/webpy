@@ -310,7 +310,7 @@ class BusinessReportPDF(FPDF):
         # Logo/Header section
         self.set_font('Arial', 'B', 16)
         self.set_text_color(44, 62, 80)
-        self.cell(0, 15, '📊 BUSINESS ANALYTICS REPORT', ln=True, align='C')
+        self.cell(0, 15, 'BUSINESS ANALYTICS REPORT', ln=True, align='C')
         
         # Date
         self.set_font('Arial', 'I', 10)
@@ -385,7 +385,7 @@ pdf.set_auto_page_break(auto=True, margin=15)
 pdf.add_page()
 
 # ✅ Executive Summary Section
-pdf.add_section_title('📈 EXECUTIVE SUMMARY')
+pdf.add_section_title('EXECUTIVE SUMMARY')
 pdf.set_font('Arial', size=11)
 pdf.set_text_color(60, 60, 60)
 
@@ -397,7 +397,7 @@ pdf.multi_cell(0, 8, summary_text)
 pdf.ln(8)
 
 # ✅ Key Metrics Section
-pdf.add_section_title('💰 KEY FINANCIAL METRICS')
+pdf.add_section_title('KEY FINANCIAL METRICS')
 
 # Calculate totals
 total_revenue = sum(revenue_data.values())
@@ -423,7 +423,7 @@ pdf.add_metric_box('Best Quarter', 'Q4 2024', 231, 76, 60)
 pdf.ln(65)
 
 # ✅ Quarterly Performance Section
-pdf.add_section_title('📊 QUARTERLY REVENUE BREAKDOWN')
+pdf.add_section_title('QUARTERLY REVENUE BREAKDOWN')
 
 for quarter, revenue in revenue_data.items():
     percentage = (revenue / total_revenue) * 100
@@ -435,7 +435,7 @@ for quarter, revenue in revenue_data.items():
 pdf.ln(5)
 
 # ✅ Sector Analysis Section
-pdf.add_section_title('🏢 PROFIT MARGIN BY SECTOR')
+pdf.add_section_title('PROFIT MARGIN BY SECTOR')
 
 for sector, margin in profit_margins.items():
     pdf.set_font('Arial', size=11)
@@ -455,14 +455,14 @@ for sector, margin in profit_margins.items():
 pdf.ln(8)
 
 # ✅ Recommendations Section
-pdf.add_section_title('🎯 STRATEGIC RECOMMENDATIONS')
+pdf.add_section_title('STRATEGIC RECOMMENDATIONS')
 
 recommendations = [
-    "• Continue investing in Technology and Finance sectors (highest margins)",
-    "• Develop growth strategies for Education and Retail sectors", 
-    "• Maintain Q4 momentum into next fiscal year",
-    "• Consider expanding high-performing product lines",
-    "• Implement cost optimization in lower-margin sectors"
+    "Continue investing in Technology and Finance sectors (highest margins)",
+    "Develop growth strategies for Education and Retail sectors", 
+    "Maintain Q4 momentum into next fiscal year",
+    "Consider expanding high-performing product lines",
+    "Implement cost optimization in lower-margin sectors"
 ]
 
 pdf.set_font('Arial', size=11)
@@ -481,15 +481,15 @@ pdf.multi_cell(0, 6,
 # ✅ Save PDF
 pdf.output("business_analytics_report.pdf")
 
-print("✅ PDF Report Generated Successfully!")
-print("📄 Filename: business_analytics_report.pdf")
-print("📊 Report includes:")
-print("   • Executive Summary")
-print("   • Key Financial Metrics") 
-print("   • Quarterly Revenue Breakdown")
-print("   • Sector Profit Analysis")
-print("   • Strategic Recommendations")
-print("\\n🎉 Your professional business report is ready!")`
+print("PDF Report Generated Successfully!")
+print("Filename: business_analytics_report.pdf")
+print("Report includes:")
+print("   Executive Summary")
+print("   Key Financial Metrics") 
+print("   Quarterly Revenue Breakdown")
+print("   Sector Profit Analysis")
+print("   Strategic Recommendations")
+print("\\nYour professional business report is ready!")`
     }
 
     setCode(examples[type] || '')
