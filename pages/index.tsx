@@ -187,7 +187,7 @@ generated_files
       }
 
     } catch (error) {
-      setOutput('Error: ' + error.toString())
+      setOutput('Error: ' + (error instanceof Error ? error.message : String(error)))
     } finally {
       // Reset stdout/stderr
       await pyodideRef.current.runPython(`
