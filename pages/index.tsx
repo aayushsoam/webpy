@@ -75,7 +75,7 @@ def show_plot():
       `)
 
       pyodideRef.current = pyodide
-      setOutput('Pyodide loaded successfully! Ready to run Python code.')
+      setOutput('Python loaded successfully! Ready to run Python code.')
     } catch (error) {
       setOutput('Error loading Pyodide: ' + error)
     }
@@ -620,7 +620,7 @@ print("\\nYour professional business report is ready!")`
   return (
     <>
       <Head>
-        <title>Python Code Runner - Next.js + Pyodide</title>
+        <title>Python Code Runner</title>
         <meta name="description" content="Run Python code in browser using Pyodide" />
       </Head>
 
@@ -630,7 +630,7 @@ print("\\nYour professional business report is ready!")`
       />
 
       <div className="container">
-        <h1>🐍 Python Code Runner with Next.js + Pyodide</h1>
+        <h1>🐍 Python Code Runner </h1>
 
         <div className="editor-section">
           <h3>Python Code Editor:</h3>
@@ -674,7 +674,7 @@ print("\\nYour professional business report is ready!")`
           <h3>📦 Install Python Packages</h3>
 
           <div className="package-suggestions">
-            <h4>🔥 Popular Pyodide-Compatible Packages:</h4>
+            <h4>🔥 python-Compatible Packages:</h4>
             <div className="suggestion-buttons">
               <button className="suggestion-btn" onClick={() => setPackageName('fpdf2')}>fpdf2 (PDF)</button>
               <button className="suggestion-btn" onClick={() => setPackageName('requests')}>requests</button>
@@ -708,7 +708,7 @@ print("\\nYour professional business report is ready!")`
 
           <div className="package-note">
             <p>
-              <strong>💡 Note:</strong> Only Pyodide-compatible packages work in browser. 
+              <strong>💡 Note:</strong> Only Python-compatible packages work in browser. 
               Popular choices: fpdf2 (PDF generation), requests (HTTP), beautifulsoup4 (web scraping), 
               plotly (interactive charts), scikit-learn (ML).
             </p>
