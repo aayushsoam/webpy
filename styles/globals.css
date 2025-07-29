@@ -97,6 +97,69 @@ button:disabled {
   border-radius: 6px;
 }
 
+.package-section {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #fff3cd;
+  border-radius: 6px;
+  border: 1px solid #ffeaa7;
+}
+
+.package-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.package-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.install-btn {
+  background-color: #17a2b8;
+  white-space: nowrap;
+}
+
+.install-btn:hover {
+  background-color: #138496;
+}
+
+.pip-install-btn {
+  background-color: #6f42c1;
+  white-space: nowrap;
+}
+
+.pip-install-btn:hover {
+  background-color: #5a32a3;
+}
+
+.installed-packages h4 {
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 14px;
+}
+
+.package-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.package-tag {
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  border: 1px solid #ced4da;
+}
+
 .example-btn {
   background-color: #17a2b8;
   margin: 5px;

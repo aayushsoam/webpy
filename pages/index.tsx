@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
 import Script from 'next/script'
@@ -32,20 +31,23 @@ plt.grid(True)
 plt.show()
 
 print("Graph generated successfully!")`)
-  
+
   const [output, setOutput] = useState('Loading Pyodide... Please wait...')
   const [isLoading, setIsLoading] = useState(false)
   const [plotImage, setPlotImage] = useState('')
+  const [packageName, setPackageName] = useState('')
+  const [isInstalling, setIsInstalling] = useState(false)
+  const [installedPackages, setInstalledPackages] = useState<string[]>(['numpy', 'matplotlib', 'pandas'])
   const pyodideRef = useRef<any>(null)
 
   // Pyodide initialize karne ka function
   const initializePyodide = async () => {
     try {
       const pyodide = await window.loadPyodide()
-      
+
       // Required packages install karte hain
       await pyodide.loadPackage(["numpy", "matplotlib", "pandas"])
-      
+
       // Matplotlib ko web ke liye configure karte hain
       await pyodide.runPython(`
 import matplotlib
@@ -65,7 +67,7 @@ def show_plot():
     plt.close()
     return img_data
       `)
-      
+
       pyodideRef.current = pyodide
       setOutput('Pyodide loaded successfully! Ready to run Python code.')
     } catch (error) {
@@ -81,7 +83,7 @@ def show_plot():
   // Code run karne ka function
   const runCode = async () => {
     if (isLoading || !pyodideRef.current) return
-    
+
     if (!code.trim()) {
       setOutput('Please enter some Python code to run.')
       return
@@ -93,7 +95,7 @@ def show_plot():
 
     try {
       const pyodide = pyodideRef.current
-      
+
       // Output capture karne ke liye
       await pyodide.runPython(`
 import sys
@@ -228,13 +230,39 @@ print("\\nAverage Age:", df['Age'].mean())`
     setCode(examples[type] || '')
   }
 
+  const installPackage = async () => {
+    if (isInstalling || !pyodideRef.current) return
+
+    if (!packageName.trim()) {
+      setOutput('Please enter a package name to install.')
+      return
+    }
+
+    setIsInstalling(true)
+    setOutput(`Installing ${packageName}...`)
+
+    try {
+      const pyodide = pyodideRef.current
+      await pyodide.loadPackage(['micropip']);
+      const micropip = pyodide.pyimport('micropip');
+      await micropip.install(packageName);
+
+      setInstalledPackages(prev => [...prev, packageName])
+      setOutput(`${packageName} installed successfully!`)
+    } catch (error) {
+      setOutput(`Error installing ${packageName}: ${error}`)
+    } finally {
+      setIsInstalling(false)
+    }
+  }
+
   return (
     <>
       <Head>
         <title>Python Code Runner - Next.js + Pyodide</title>
         <meta name="description" content="Run Python code in browser using Pyodide" />
       </Head>
-      
+
       <Script 
         src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"
         strategy="beforeInteractive"
@@ -242,7 +270,7 @@ print("\\nAverage Age:", df['Age'].mean())`
 
       <div className="container">
         <h1>🐍 Python Code Runner with Next.js + Pyodide</h1>
-        
+
         <div className="editor-section">
           <h3>Python Code Editor:</h3>
           <textarea
@@ -277,6 +305,23 @@ print("\\nAverage Age:", df['Age'].mean())`
           <button onClick={() => loadExample('matplotlib')} className="example-btn">Matplotlib Graph</button>
           <button onClick={() => loadExample('numpy')} className="example-btn">NumPy Array</button>
           <button onClick={() => loadExample('pandas')} className="example-btn">Pandas DataFrame</button>
+        </div>
+         {/* Package Installation Section */}
+         <div className="package-installer">
+          <h3>Install Package:</h3>
+          <input
+            type="text"
+            placeholder="Enter package name"
+            value={packageName}
+            onChange={(e) => setPackageName(e.target.value)}
+            disabled={isInstalling}
+          />
+          <button
+            onClick={installPackage}
+            disabled={isInstalling || !pyodideRef.current}
+          >
+            {isInstalling ? '⏳ Installing...' : 'Install'}
+          </button>
         </div>
 
         <div className="output-section">
