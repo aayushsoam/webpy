@@ -1,0 +1,34 @@
+Output:
+PDF Report Generated Successfully!
+Filename: business_analytics_report.pdf
+Report includes:
+   Executive Summary
+   Key Financial Metrics
+   Quarterly Revenue Breakdown
+   Sector Profit Analysis
+   Strategic Recommendations
+
+Your professional business report is ready!
+Errors:
+<exec>:9: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+<exec>:11: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+<exec>:14: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+<exec>:17: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+<exec>:33: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+<exec>:35: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+<exec>:88: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+<exec>:49: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+<exec>:51: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+<exec>:53: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+<exec>:55: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+<exec>:127: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+<exec>:128: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=False use new_x=XPos.RIGHT, new_y=YPos.TOP.
+<exec>:129: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=False use new_x=XPos.RIGHT, new_y=YPos.TOP.
+<exec>:130: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+<exec>:27: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+<exec>:138: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+<exec>:141: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=False use new_x=XPos.RIGHT, new_y=YPos.TOP.
+<exec>:149: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=False use new_x=XPos.RIGHT, new_y=YPos.TOP.
+<exec>:150: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+<exec>:165: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+<exec>:173: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
