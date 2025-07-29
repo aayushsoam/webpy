@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
+import Script from 'next/script'
 
 declare global {
   interface Window {
@@ -232,8 +233,12 @@ print("\\nAverage Age:", df['Age'].mean())`
       <Head>
         <title>Python Code Runner - Next.js + Pyodide</title>
         <meta name="description" content="Run Python code in browser using Pyodide" />
-        <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
       </Head>
+      
+      <Script 
+        src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"
+        strategy="beforeInteractive"
+      />
 
       <div className="container">
         <h1>🐍 Python Code Runner with Next.js + Pyodide</h1>
