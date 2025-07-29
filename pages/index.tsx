@@ -300,23 +300,24 @@ print("📊 Average Revenue: $" + avg_revenue + "M")
 
 plt.tight_layout()
 plt.show()`,
-      'pdf': `# ✅ PDF Report Generator
+      'pdf': `# ✅ PDF Report Generator (Updated with latest FPDF2 syntax)
 from fpdf import FPDF
+from fpdf.enums import XPos, YPos
 import datetime
 
 # ✅ Create PDF class with custom styling
 class BusinessReportPDF(FPDF):
     def header(self):
         # Logo/Header section
-        self.set_font('Arial', 'B', 16)
+        self.set_font('helvetica', 'B', 16)
         self.set_text_color(44, 62, 80)
-        self.cell(0, 15, 'BUSINESS ANALYTICS REPORT', ln=True, align='C')
+        self.cell(0, 15, 'BUSINESS ANALYTICS REPORT', new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
         
         # Date
-        self.set_font('Arial', 'I', 10)
+        self.set_font('helvetica', 'I', 10)
         self.set_text_color(100, 100, 100)
         today = datetime.datetime.now().strftime("%B %d, %Y")
-        self.cell(0, 8, 'Generated on: ' + today, ln=True, align='C')
+        self.cell(0, 8, 'Generated on: ' + today, new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
         self.ln(5)
         
         # Horizontal line
@@ -326,15 +327,15 @@ class BusinessReportPDF(FPDF):
 
     def footer(self):
         self.set_y(-15)
-        self.set_font('Arial', 'I', 8)
+        self.set_font('helvetica', 'I', 8)
         self.set_text_color(100, 100, 100)
         page_text = 'Page ' + str(self.page_no()) + ' | Confidential Business Report'
         self.cell(0, 10, page_text, align='C')
 
     def add_section_title(self, title):
-        self.set_font('Arial', 'B', 14)
+        self.set_font('helvetica', 'B', 14)
         self.set_text_color(44, 62, 80)
-        self.cell(0, 12, title, ln=True)
+        self.cell(0, 12, title, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         self.ln(3)
 
     def add_metric_box(self, label, value, color_r=52, color_g=152, color_b=219):
@@ -348,13 +349,13 @@ class BusinessReportPDF(FPDF):
         
         # Add white text
         self.set_text_color(255, 255, 255)
-        self.set_font('Arial', 'B', 10)
+        self.set_font('helvetica', 'B', 10)
         self.set_xy(x + 5, y + 5)
-        self.cell(0, 5, label, ln=True)
+        self.cell(0, 5, label, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         
-        self.set_font('Arial', 'B', 16)
+        self.set_font('helvetica', 'B', 16)
         self.set_xy(x + 5, y + 12)
-        self.cell(0, 8, value, ln=True)
+        self.cell(0, 8, value, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         
         # Reset text color
         self.set_text_color(0, 0, 0)
@@ -387,7 +388,7 @@ pdf.add_page()
 
 # ✅ Executive Summary Section
 pdf.add_section_title('EXECUTIVE SUMMARY')
-pdf.set_font('Arial', size=11)
+pdf.set_font('helvetica', size=11)
 pdf.set_text_color(60, 60, 60)
 
 summary_text = """Our business analytics reveal strong performance across all quarters with consistent growth. Key highlights include a 53.6% revenue increase from Q1 to Q4, improved profit margins in technology and finance sectors, and successful market expansion initiatives."""
@@ -426,10 +427,10 @@ pdf.add_section_title('QUARTERLY REVENUE BREAKDOWN')
 
 for quarter, revenue in revenue_data.items():
     percentage = (revenue / total_revenue) * 100
-    pdf.set_font('Arial', size=11)
-    pdf.cell(40, 8, quarter + ':', ln=False)
-    pdf.cell(60, 8, '$' + str(revenue), ln=False)
-    pdf.cell(0, 8, '(' + str(round(percentage, 1)) + '% of total)', ln=True)
+    pdf.set_font('helvetica', size=11)
+    pdf.cell(40, 8, quarter + ':', new_x=XPos.RIGHT, new_y=YPos.TOP)
+    pdf.cell(60, 8, '$' + str(revenue), new_x=XPos.RIGHT, new_y=YPos.TOP)
+    pdf.cell(0, 8, '(' + str(round(percentage, 1)) + '% of total)', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
 pdf.ln(5)
 
@@ -437,10 +438,10 @@ pdf.ln(5)
 pdf.add_section_title('PROFIT MARGIN BY SECTOR')
 
 for sector, margin in profit_margins.items():
-    pdf.set_font('Arial', size=11)
+    pdf.set_font('helvetica', size=11)
     
     # Sector name
-    pdf.cell(60, 8, sector + ':', ln=False)
+    pdf.cell(60, 8, sector + ':', new_x=XPos.RIGHT, new_y=YPos.TOP)
     
     # Progress bar effect
     pdf.set_fill_color(52, 152, 219)
@@ -448,8 +449,8 @@ for sector, margin in profit_margins.items():
     pdf.rect(pdf.get_x(), pdf.get_y() + 2, bar_width, 4, 'F')
     
     # Percentage
-    pdf.cell(90, 8, '', ln=False)  # Space for bar
-    pdf.cell(0, 8, str(margin) + '%', ln=True)
+    pdf.cell(90, 8, '', new_x=XPos.RIGHT, new_y=YPos.TOP)  # Space for bar
+    pdf.cell(0, 8, str(margin) + '%', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
 pdf.ln(8)
 
@@ -464,7 +465,7 @@ recommendations = [
     "Implement cost optimization in lower-margin sectors"
 ]
 
-pdf.set_font('Arial', size=10)
+pdf.set_font('helvetica', size=10)
 for i, rec in enumerate(recommendations, 1):
     pdf.multi_cell(0, 6, str(i) + ". " + rec)
     pdf.ln(2)
@@ -472,7 +473,7 @@ for i, rec in enumerate(recommendations, 1):
 pdf.ln(5)
 
 # ✅ Footer note
-pdf.set_font('Arial', 'I', 8)
+pdf.set_font('helvetica', 'I', 8)
 pdf.set_text_color(100, 100, 100)
 footer_text = "This report is generated automatically from business analytics data. For detailed analysis and custom reports, contact the analytics team."
 pdf.multi_cell(0, 5, footer_text)
