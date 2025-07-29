@@ -224,7 +224,69 @@ data = {
 df = pd.DataFrame(data)
 print("DataFrame:")
 print(df)
-print("\\nAverage Age:", df['Age'].mean())`
+print("\\nAverage Age:", df['Age'].mean())`,
+
+      'business': `# Business Analytics Dashboard (Matplotlib Version)
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+import matplotlib.patches as patches
+
+# Generate dataset
+np.random.seed(42)
+categories = ['Technology', 'Finance', 'Healthcare', 'Education', 'Retail']
+years = np.arange(2018, 2024)
+
+data = []
+for year in years:
+    for cat in categories:
+        data.append([year, cat, np.random.randint(50, 200), np.random.randint(10, 50)])
+
+df = pd.DataFrame(data, columns=['Year', 'Category', 'Revenue', 'Profit'])
+
+# Create animated-style chart for latest year
+plt.style.use('dark_background')
+fig, ax = plt.subplots(figsize=(12, 8))
+
+# Get latest year data
+latest_data = df[df['Year'] == 2023]
+colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7']
+
+bars = ax.bar(latest_data['Category'], latest_data['Revenue'], 
+              color=colors, alpha=0.8, edgecolor='white', linewidth=1.5)
+
+# Add value labels on bars
+for i, (bar, revenue) in enumerate(zip(bars, latest_data['Revenue'])):
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 5,
+            f'{revenue}M', ha='center', va='bottom', fontweight='bold', fontsize=12)
+
+# Styling
+ax.set_title('📊 AI-Style Dynamic Revenue Graph (2023)', 
+             fontsize=20, fontweight='bold', pad=20)
+ax.set_xlabel('Business Category', fontsize=14, fontweight='bold')
+ax.set_ylabel('Revenue (Millions)', fontsize=14, fontweight='bold')
+ax.set_ylim(0, max(latest_data['Revenue']) * 1.2)
+
+# Add grid
+ax.grid(True, alpha=0.3, linestyle='--')
+ax.set_axisbelow(True)
+
+# Rotate x-axis labels
+plt.xticks(rotation=45, ha='right')
+
+# Add trend analysis
+print("📈 Business Analytics Report 2023:")
+print("=" * 40)
+for _, row in latest_data.iterrows():
+    print(f"{row['Category']}: ${row['Revenue']}M Revenue, ${row['Profit']}M Profit")
+    
+print(f"\\n🏆 Top Performer: {latest_data.loc[latest_data['Revenue'].idxmax(), 'Category']}")
+print(f"💰 Total Revenue: ${latest_data['Revenue'].sum()}M")
+print(f"📊 Average Revenue: ${latest_data['Revenue'].mean():.1f}M")
+
+plt.tight_layout()
+plt.show()`
     }
 
     setCode(examples[type] || '')
@@ -305,6 +367,7 @@ print("\\nAverage Age:", df['Age'].mean())`
           <button onClick={() => loadExample('matplotlib')} className="example-btn">Matplotlib Graph</button>
           <button onClick={() => loadExample('numpy')} className="example-btn">NumPy Array</button>
           <button onClick={() => loadExample('pandas')} className="example-btn">Pandas DataFrame</button>
+          <button onClick={() => loadExample('business')} className="example-btn">📊 Business Analytics</button>
         </div>
          {/* Package Installation Section */}
          <div className="package-installer">
