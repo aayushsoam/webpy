@@ -408,13 +408,13 @@ start_x = pdf.get_x()
 start_y = pdf.get_y()
 
 pdf.set_xy(start_x, start_y)
-pdf.add_metric_box('Total Revenue', f'${total_revenue:,.0f}', 52, 152, 219)
+pdf.add_metric_box('Total Revenue', f'${total_revenue:,}', 52, 152, 219)
 
 pdf.set_xy(start_x + 95, start_y)
-pdf.add_metric_box('Growth Rate', f'{growth_rate:.1f}%', 46, 204, 113)
+pdf.add_metric_box('Growth Rate', f'{round(growth_rate, 1)}%', 46, 204, 113)
 
 pdf.set_xy(start_x, start_y + 30)
-pdf.add_metric_box('Avg Profit Margin', f'{avg_margin:.1f}%', 155, 89, 182)
+pdf.add_metric_box('Avg Profit Margin', f'{round(avg_margin, 1)}%', 155, 89, 182)
 
 pdf.set_xy(start_x + 95, start_y + 30)
 pdf.add_metric_box('Best Quarter', 'Q4 2024', 231, 76, 60)
@@ -429,7 +429,7 @@ for quarter, revenue in revenue_data.items():
     pdf.set_font('Arial', size=11)
     pdf.cell(40, 8, f'{quarter}:', ln=False)
     pdf.cell(60, 8, f'${revenue:,}', ln=False)
-    pdf.cell(0, 8, f'({percentage:.1f}% of total)', ln=True)
+    pdf.cell(0, 8, f'({round(percentage, 1)}% of total)', ln=True)
 
 pdf.ln(5)
 
