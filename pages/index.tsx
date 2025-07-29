@@ -224,7 +224,82 @@ data = {
 df = pd.DataFrame(data)
 print("DataFrame:")
 print(df)
-print("\\nAverage Age:", df['Age'].mean())`
+print("\\nAverage Age:", df['Age'].mean())`,
+      'analytics': `# ✅ Business Analytics Dashboard
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ✅ Generate sample business data
+np.random.seed(42)
+categories = ['Technology', 'Finance', 'Healthcare', 'Education', 'Retail']
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+
+# Create revenue data
+revenue_data = []
+for month in months:
+    for category in categories:
+        revenue = np.random.randint(50, 200)
+        profit = revenue * np.random.uniform(0.1, 0.3)
+        revenue_data.append([month, category, revenue, profit])
+
+df = pd.DataFrame(revenue_data, columns=['Month', 'Category', 'Revenue', 'Profit'])
+
+# ✅ Create visualizations
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 12))
+
+# Revenue by Category
+category_revenue = df.groupby('Category')['Revenue'].sum()
+ax1.bar(category_revenue.index, category_revenue.values, color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FECA57'])
+ax1.set_title('Total Revenue by Category', fontsize=14, fontweight='bold')
+ax1.set_ylabel('Revenue (Million $)')
+ax1.tick_params(axis='x', rotation=45)
+
+# Monthly Revenue Trend
+monthly_revenue = df.groupby('Month')['Revenue'].sum()
+ax2.plot(monthly_revenue.index, monthly_revenue.values, marker='o', linewidth=3, color='#FF6B6B')
+ax2.set_title('Monthly Revenue Trend', fontsize=14, fontweight='bold')
+ax2.set_ylabel('Revenue (Million $)')
+ax2.grid(True, alpha=0.3)
+
+# Profit Margin by Category
+category_profit = df.groupby('Category')['Profit'].sum()
+profit_margin = (category_profit / category_revenue * 100)
+ax3.pie(profit_margin.values, labels=profit_margin.index, autopct='%1.1f%%', startangle=90)
+ax3.set_title('Profit Margin Distribution', fontsize=14, fontweight='bold')
+
+# Revenue vs Profit Scatter
+ax4.scatter(df['Revenue'], df['Profit'], alpha=0.6, c=df['Category'].astype('category').cat.codes, cmap='viridis')
+ax4.set_xlabel('Revenue (Million $)')
+ax4.set_ylabel('Profit (Million $)')
+ax4.set_title('Revenue vs Profit Analysis', fontsize=14, fontweight='bold')
+
+plt.tight_layout()
+plt.show()
+
+# ✅ Display insights
+print("📊 BUSINESS ANALYTICS DASHBOARD")
+print("=" * 40)
+
+latest_data = df[df['Month'] == 'Jun']
+print("\\n📈 JUNE 2024 PERFORMANCE:")
+print("-" * 25)
+
+for _, row in latest_data.iterrows():
+    revenue_str = str(int(row['Revenue']))
+    profit_str = str(round(row['Profit'], 1))
+    print(row['Category'] + ": $" + revenue_str + "M Revenue, $" + profit_str + "M Profit")
+
+top_performer = latest_data.loc[latest_data['Revenue'].idxmax(), 'Category']
+total_revenue = str(int(latest_data['Revenue'].sum()))
+avg_revenue = str(round(latest_data['Revenue'].mean(), 1))
+
+print("\\n🏆 Top Performer: " + top_performer)
+print("💰 Total Revenue: $" + total_revenue + "M")
+print("📊 Average Revenue: $" + avg_revenue + "M")
+
+plt.tight_layout()
+plt.show()`
     }
 
     setCode(examples[type] || '')
@@ -305,6 +380,7 @@ print("\\nAverage Age:", df['Age'].mean())`
           <button onClick={() => loadExample('matplotlib')} className="example-btn">Matplotlib Graph</button>
           <button onClick={() => loadExample('numpy')} className="example-btn">NumPy Array</button>
           <button onClick={() => loadExample('pandas')} className="example-btn">Pandas DataFrame</button>
+          <button onClick={() => loadExample('analytics')} className="example-btn">Business Analytics</button>
         </div>
          {/* Package Installation Section */}
          <div className="package-installer">

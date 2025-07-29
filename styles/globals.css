@@ -97,6 +97,66 @@ button:disabled {
   border-radius: 6px;
 }
 
+.package-installer {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #fff3cd;
+  border-radius: 6px;
+  border: 1px solid #ffeaa7;
+}
+
+.package-suggestions {
+  margin-bottom: 20px;
+}
+
+.package-suggestions h4 {
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 16px;
+}
+
+.suggestion-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.suggestion-btn {
+  background-color: #6c757d;
+  color: white;
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.suggestion-btn:hover {
+  background-color: #5a6268;
+}
+
+.package-input-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.package-note {
+  background-color: #e7f3ff;
+  padding: 12px;
+  border-radius: 4px;
+  border-left: 4px solid #007bff;
+}
+
+.package-note p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
 .package-section {
   margin: 20px 0;
   padding: 20px;
