@@ -1,31 +1,36 @@
-entrypoint = "main.py"
-modules = ["python-3.11"]
+
+entrypoint = "package.json"
+modules = ["nodejs-20"]
 
 [nix]
 channel = "stable-25_05"
 
-[unitTest]
-language = "python3"
-
-[gitHubImport]
-requiredFiles = [".replit", "replit.nix"]
-
 [deployment]
-run = ["python3", "main.py"]
+build = ["npm", "run", "build"]
+run = ["npm", "run", "start"]
 deploymentTarget = "cloudrun"
 
 [workflows]
-runButton = "Run Flask App"
+runButton = "Next.js Dev Server"
 
 [[workflows.workflow]]
-name = "Run Flask App"
+name = "Next.js Dev Server"
 author = 26470979
 mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python main.py"
+args = "npm run dev"
+
+[[workflows.workflow]]
+name = "Build & Start"
+author = 26470979
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run build && npm run start"
 
 [[ports]]
-localPort = 5000
+localPort = 3000
 externalPort = 80
