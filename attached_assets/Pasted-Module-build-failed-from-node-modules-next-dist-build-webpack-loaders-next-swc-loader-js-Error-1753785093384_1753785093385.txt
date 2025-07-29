@@ -1,0 +1,71 @@
+Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error: 
+  × Expected '}', got ':'
+     ╭─[/home/runner/workspace/pages/index.tsx:408:1]
+ 408 │ start_y = pdf.get_y()
+ 409 │ 
+ 410 │ pdf.set_xy(start_x, start_y)
+ 411 │ pdf.add_metric_box('Total Revenue', f'${total_revenue:,.0f}', 52, 152, 219)
+     ·                                                      ─
+ 412 │ 
+ 413 │ pdf.set_xy(start_x + 95, start_y)
+ 414 │ pdf.add_metric_box('Growth Rate', f'{growth_rate:.1f}%', 46, 204, 113)
+     ╰────
+
+
+Caused by:
+    Syntax Error
+[HMR] connected
+./pages/index.tsx
+Error: 
+  × Expected '}', got ':'
+     ╭─[/home/runner/workspace/pages/index.tsx:408:1]
+ 408 │ start_y = pdf.get_y()
+ 409 │ 
+ 410 │ pdf.set_xy(start_x, start_y)
+ 411 │ pdf.add_metric_box('Total Revenue', f'${total_revenue:,.0f}', 52, 152, 219)
+     ·                                                      ─
+ 412 │ 
+ 413 │ pdf.set_xy(start_x + 95, start_y)
+ 414 │ pdf.add_metric_box('Growth Rate', f'{growth_rate:.1f}%', 46, 204, 113)
+     ╰────
+
+Caused by:
+    Syntax Error
+Error:
+× Expected &#x27;}&#x27;, got &#x27;:&#x27;
+╭─[/home/runner/workspace/pages/index.tsx:408:1]
+408 │ start_y = pdf.get_y()
+409 │
+410 │ pdf.set_xy(start_x, start_y)
+411 │ pdf.add_metric_box(&#x27;Total Revenue&#x27;, f&#x27;${total_revenue:,.0f}&#x27;, 52, 152, 219)
+· ─
+412 │
+413 │ pdf.set_xy(start_x + 95, start_y)
+414 │ pdf.add_metric_box(&#x27;Growth Rate&#x27;, f&#x27;{growth_rate:.1f}%&#x27;, 46, 204, 113)
+╰────
+
+Caused by:
+Syntax Error
+at t.value (https://7b03d861-f4cb-489b-abb7-500d70d96f97-00-m09n45k3pgkg.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://7b03d861-f4cb-489b-abb7-500d70d96f97-00-m09n45k3pgkg.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://7b03d861-f4cb-489b-abb7-500d70d96f97-00-m09n45k3pgkg.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://7b03d861-f4cb-489b-abb7-500d70d96f97-00-m09n45k3pgkg.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Failed to compile
+./pages/index.tsx
+Error: 
+  × Expected '}', got ':'
+     ╭─[/home/runner/workspace/pages/index.tsx:408:1]
+ 408 │ start_y = pdf.get_y()
+ 409 │ 
+ 410 │ pdf.set_xy(start_x, start_y)
+ 411 │ pdf.add_metric_box('Total Revenue', f'${total_revenue:,.0f}', 52, 152, 219)
+     ·                                                      ─
+ 412 │ 
+ 413 │ pdf.set_xy(start_x + 95, start_y)
+ 414 │ pdf.add_metric_box('Growth Rate', f'{growth_rate:.1f}%', 46, 204, 113)
+     ╰────
+
+Caused by:
+    Syntax Error
+This error occurred during the build process and can only be dismissed by fixing the error.
