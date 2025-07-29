@@ -38,6 +38,7 @@ print("Graph generated successfully!")`)
   const [packageName, setPackageName] = useState('')
   const [isInstalling, setIsInstalling] = useState(false)
   const [installedPackages, setInstalledPackages] = useState<string[]>(['numpy', 'matplotlib', 'pandas'])
+  const [generatedFiles, setGeneratedFiles] = useState<{name: string, content: string, type: string}[]>([])
   const pyodideRef = useRef<any>(null)
 
   // Pyodide initialize karne ka function
@@ -140,6 +141,32 @@ plt.get_fignums() if 'plt' in globals() else []
         }
       }
 
+      // Check for generated files (PDF, etc.)
+      try {
+        const fileCheck = await pyodide.runPython(`
+import os
+import base64
+
+generated_files = []
+for file in os.listdir('.'):
+    if file.endswith(('.pdf', '.txt', '.csv', '.json')):
+        try:
+            with open(file, 'rb') as f:
+                content = base64.b64encode(f.read()).decode()
+                file_type = file.split('.')[-1].lower()
+                generated_files.append({'name': file, 'content': content, 'type': file_type})
+        except:
+            pass
+generated_files
+        `)
+        
+        if (fileCheck && fileCheck.length > 0) {
+          setGeneratedFiles(fileCheck)
+        }
+      } catch (fileError) {
+        // No files generated
+      }
+
     } catch (error) {
       setOutput('Error: ' + error.toString())
     } finally {
@@ -156,6 +183,7 @@ sys.stderr = sys.__stderr__
   const clearOutput = () => {
     setOutput('')
     setPlotImage('')
+    setGeneratedFiles([])
   }
 
   const clearCode = () => {
@@ -652,6 +680,58 @@ print("\\nYour professional business report is ready!")`
           {plotImage && (
             <div className="plot-container">
               <img src={`data:image/png;base64,${plotImage}`} alt="Generated Plot" />
+            </div>
+          )}
+          
+          {/* Generated Files Display */}
+          {generatedFiles.length > 0 && (
+            <div className="generated-files">
+              <h3>📁 Generated Files</h3>
+              <div className="files-grid">
+                {generatedFiles.map((file, index) => (
+                  <div key={index} className="file-item">
+                    <div className="file-info">
+                      <span className="file-icon">
+                        {file.type === 'pdf' ? '📄' : 
+                         file.type === 'txt' ? '📝' : 
+                         file.type === 'csv' ? '📊' : 
+                         file.type === 'json' ? '⚙️' : '📁'}
+                      </span>
+                      <span className="file-name">{file.name}</span>
+                      <span className="file-type">{file.type.toUpperCase()}</span>
+                    </div>
+                    <button 
+                      onClick={() => downloadFile(file)} 
+                      className="download-btn"
+                    >
+                      💾 Download
+                    </button>
+                  </div>
+                ))}
+              </div>
+              
+              {/* PDF Viewer */}
+              {generatedFiles.some(f => f.type === 'pdf') && (
+                <div className="pdf-viewer">
+                  <h4>📖 PDF Preview</h4>
+                  {generatedFiles
+                    .filter(f => f.type === 'pdf')
+                    .map((pdfFile, index) => (
+                      <div key={index} className="pdf-container">
+                        <h5>{pdfFile.name}</h5>
+                        <iframe
+                          src={`data:application/pdf;base64,${pdfFile.content}`}
+                          className="pdf-frame"
+                          title={`PDF Viewer - ${pdfFile.name}`}
+                        />
+                        <p className="pdf-note">
+                          📱 Mobile users: If PDF doesn't display, use the download button above
+                        </p>
+                      </div>
+                    ))
+                  }
+                </div>
+              )}
             </div>
           )}
         </div>
