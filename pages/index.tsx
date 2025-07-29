@@ -312,14 +312,14 @@ class BusinessReportPDF(FPDF):
         self.set_font('helvetica', 'B', 16)
         self.set_text_color(44, 62, 80)
         self.cell(0, 15, 'BUSINESS ANALYTICS REPORT', new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
-        
+
         # Date
         self.set_font('helvetica', 'I', 10)
         self.set_text_color(100, 100, 100)
         today = datetime.datetime.now().strftime("%B %d, %Y")
         self.cell(0, 8, 'Generated on: ' + today, new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
         self.ln(5)
-        
+
         # Horizontal line
         self.set_draw_color(52, 152, 219)
         self.line(20, self.get_y(), 190, self.get_y())
@@ -342,21 +342,21 @@ class BusinessReportPDF(FPDF):
         # Save current position
         x = self.get_x()
         y = self.get_y()
-        
+
         # Draw colored box
         self.set_fill_color(color_r, color_g, color_b)
         self.rect(x, y, 85, 25, 'F')
-        
+
         # Add white text
         self.set_text_color(255, 255, 255)
         self.set_font('helvetica', 'B', 10)
         self.set_xy(x + 5, y + 5)
         self.cell(0, 5, label, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-        
+
         self.set_font('helvetica', 'B', 16)
         self.set_xy(x + 5, y + 12)
         self.cell(0, 8, value, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-        
+
         # Reset text color
         self.set_text_color(0, 0, 0)
         return 90  # Width + margin
@@ -439,15 +439,15 @@ pdf.add_section_title('PROFIT MARGIN BY SECTOR')
 
 for sector, margin in profit_margins.items():
     pdf.set_font('helvetica', size=11)
-    
+
     # Sector name
     pdf.cell(60, 8, sector + ':', new_x=XPos.RIGHT, new_y=YPos.TOP)
-    
+
     # Progress bar effect
     pdf.set_fill_color(52, 152, 219)
     bar_width = (margin / 35) * 80  # Scale to max width of 80
     pdf.rect(pdf.get_x(), pdf.get_y() + 2, bar_width, 4, 'F')
-    
+
     # Percentage
     pdf.cell(90, 8, '', new_x=XPos.RIGHT, new_y=YPos.TOP)  # Space for bar
     pdf.cell(0, 8, str(margin) + '%', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
@@ -493,6 +493,33 @@ print("\\nYour professional business report is ready!")`
     }
 
     setCode(examples[type] || '')
+  }
+
+  // File download function
+  const downloadFile = (file: {name: string, content: string, type: string}) => {
+    try {
+      const byteCharacters = atob(file.content)
+      const byteNumbers = new Array(byteCharacters.length)
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i)
+      }
+      const byteArray = new Uint8Array(byteNumbers)
+
+      const blob = new Blob([byteArray], { 
+        type: file.type === 'pdf' ? 'application/pdf' : 'application/octet-stream' 
+      })
+
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = file.name
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Error downloading file:', error)
+    }
   }
 
   const installPackage = async () => {
@@ -576,7 +603,7 @@ print("\\nYour professional business report is ready!")`
          {/* Package Installation Section */}
          <div className="package-installer">
           <h3>📦 Install Python Packages</h3>
-          
+
           <div className="package-suggestions">
             <h4>🔥 Popular Pyodide-Compatible Packages:</h4>
             <div className="suggestion-buttons">
