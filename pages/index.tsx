@@ -381,7 +381,8 @@ profit_margins = {
 
 # ✅ Create PDF Report
 pdf = BusinessReportPDF()
-pdf.set_auto_page_break(auto=True, margin=15)
+pdf.set_auto_page_break(auto=True, margin=20)
+pdf.set_margins(20, 20, 20)
 pdf.add_page()
 
 # ✅ Executive Summary Section
@@ -389,11 +390,9 @@ pdf.add_section_title('EXECUTIVE SUMMARY')
 pdf.set_font('Arial', size=11)
 pdf.set_text_color(60, 60, 60)
 
-summary_text = """Our business analytics reveal strong performance across all quarters with consistent growth. 
-Key highlights include a 53.6% revenue increase from Q1 to Q4, improved profit margins in 
-technology and finance sectors, and successful market expansion initiatives."""
+summary_text = """Our business analytics reveal strong performance across all quarters with consistent growth. Key highlights include a 53.6% revenue increase from Q1 to Q4, improved profit margins in technology and finance sectors, and successful market expansion initiatives."""
 
-pdf.multi_cell(0, 8, summary_text)
+pdf.multi_cell(0, 6, summary_text)
 pdf.ln(8)
 
 # ✅ Key Metrics Section
@@ -458,25 +457,25 @@ pdf.ln(8)
 pdf.add_section_title('STRATEGIC RECOMMENDATIONS')
 
 recommendations = [
-    "Continue investing in Technology and Finance sectors (highest margins)",
+    "Continue investing in Technology and Finance sectors",
     "Develop growth strategies for Education and Retail sectors", 
     "Maintain Q4 momentum into next fiscal year",
     "Consider expanding high-performing product lines",
     "Implement cost optimization in lower-margin sectors"
 ]
 
-pdf.set_font('Arial', size=11)
-for rec in recommendations:
-    pdf.multi_cell(0, 7, rec)
+pdf.set_font('Arial', size=10)
+for i, rec in enumerate(recommendations, 1):
+    pdf.multi_cell(0, 6, str(i) + ". " + rec)
+    pdf.ln(2)
 
 pdf.ln(5)
 
 # ✅ Footer note
-pdf.set_font('Arial', 'I', 9)
+pdf.set_font('Arial', 'I', 8)
 pdf.set_text_color(100, 100, 100)
-pdf.multi_cell(0, 6, 
-    "This report is generated automatically from business analytics data. "
-    "For detailed analysis and custom reports, contact the analytics team.")
+footer_text = "This report is generated automatically from business analytics data. For detailed analysis and custom reports, contact the analytics team."
+pdf.multi_cell(0, 5, footer_text)
 
 # ✅ Save PDF
 pdf.output("business_analytics_report.pdf")
