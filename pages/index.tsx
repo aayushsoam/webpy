@@ -48,6 +48,11 @@ print("Graph generated successfully!")`)
 
       // Required packages install karte hain
       await pyodide.loadPackage(["numpy", "matplotlib", "pandas"])
+      
+      // Install fpdf2 for PDF generation
+      await pyodide.loadPackage(['micropip']);
+      const micropip = pyodide.pyimport('micropip');
+      await micropip.install('fpdf2');
 
       // Matplotlib ko web ke liye configure karte hain
       await pyodide.runPython(`
@@ -148,23 +153,37 @@ import os
 import base64
 
 generated_files = []
-for file in os.listdir('.'):
-    if file.endswith(('.pdf', '.txt', '.csv', '.json')):
-        try:
-            with open(file, 'rb') as f:
-                content = base64.b64encode(f.read()).decode()
-                file_type = file.split('.')[-1].lower()
-                generated_files.append({'name': file, 'content': content, 'type': file_type})
-        except:
-            pass
+try:
+    files = os.listdir('.')
+    for file in files:
+        if file.endswith(('.pdf', '.txt', '.csv', '.json', '.xlsx', '.docx')):
+            try:
+                file_size = os.path.getsize(file)
+                if file_size > 0:  # Only include non-empty files
+                    with open(file, 'rb') as f:
+                        content = base64.b64encode(f.read()).decode()
+                        file_type = file.split('.')[-1].lower()
+                        generated_files.append({
+                            'name': file, 
+                            'content': content, 
+                            'type': file_type,
+                            'size': file_size
+                        })
+                        print(f"Found file: {file} ({file_size} bytes)")
+            except Exception as e:
+                print(f"Error reading file {file}: {e}")
+except Exception as e:
+    print(f"Error listing directory: {e}")
+
 generated_files
         `)
         
         if (fileCheck && fileCheck.length > 0) {
           setGeneratedFiles(fileCheck)
+          setOutput(prev => prev + `\nFound ${fileCheck.length} generated file(s)`)
         }
       } catch (fileError) {
-        // No files generated
+        console.error('File detection error:', fileError)
       }
 
     } catch (error) {
@@ -526,6 +545,11 @@ print("\\nYour professional business report is ready!")`
   // File download function
   const downloadFile = (file: {name: string, content: string, type: string}) => {
     try {
+      if (!file.content) {
+        alert('File content is empty')
+        return
+      }
+
       const byteCharacters = atob(file.content)
       const byteNumbers = new Array(byteCharacters.length)
       for (let i = 0; i < byteCharacters.length; i++) {
@@ -533,20 +557,37 @@ print("\\nYour professional business report is ready!")`
       }
       const byteArray = new Uint8Array(byteNumbers)
 
+      const mimeTypes: {[key: string]: string} = {
+        'pdf': 'application/pdf',
+        'txt': 'text/plain',
+        'csv': 'text/csv',
+        'json': 'application/json',
+        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      }
+
       const blob = new Blob([byteArray], { 
-        type: file.type === 'pdf' ? 'application/pdf' : 'application/octet-stream' 
+        type: mimeTypes[file.type] || 'application/octet-stream' 
       })
 
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
       link.download = file.name
+      link.style.display = 'none'
       document.body.appendChild(link)
       link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
+      
+      // Cleanup
+      setTimeout(() => {
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+      }, 100)
+      
+      setOutput(prev => prev + `\nDownloaded: ${file.name}`)
     } catch (error) {
       console.error('Error downloading file:', error)
+      alert(`Error downloading ${file.name}: ${error}`)
     }
   }
 
@@ -697,8 +738,13 @@ print("\\nYour professional business report is ready!")`
                          file.type === 'csv' ? '📊' : 
                          file.type === 'json' ? '⚙️' : '📁'}
                       </span>
-                      <span className="file-name">{file.name}</span>
-                      <span className="file-type">{file.type.toUpperCase()}</span>
+                      <div className="file-details">
+                        <span className="file-name">{file.name}</span>
+                        <span className="file-meta">
+                          {file.type.toUpperCase()} 
+                          {(file as any).size && ` • ${Math.round((file as any).size / 1024)}KB`}
+                        </span>
+                      </div>
                     </div>
                     <button 
                       onClick={() => downloadFile(file)} 
