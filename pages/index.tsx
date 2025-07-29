@@ -316,7 +316,7 @@ class BusinessReportPDF(FPDF):
         self.set_font('Arial', 'I', 10)
         self.set_text_color(100, 100, 100)
         today = datetime.datetime.now().strftime("%B %d, %Y")
-        self.cell(0, 8, f'Generated on: {today}', ln=True, align='C')
+        self.cell(0, 8, 'Generated on: ' + today, ln=True, align='C')
         self.ln(5)
         
         # Horizontal line
@@ -328,7 +328,8 @@ class BusinessReportPDF(FPDF):
         self.set_y(-15)
         self.set_font('Arial', 'I', 8)
         self.set_text_color(100, 100, 100)
-        self.cell(0, 10, f'Page {self.page_no()} | Confidential Business Report', align='C')
+        page_text = 'Page ' + str(self.page_no()) + ' | Confidential Business Report'
+        self.cell(0, 10, page_text, align='C')
 
     def add_section_title(self, title):
         self.set_font('Arial', 'B', 14)
@@ -408,13 +409,13 @@ start_x = pdf.get_x()
 start_y = pdf.get_y()
 
 pdf.set_xy(start_x, start_y)
-pdf.add_metric_box('Total Revenue', f'${total_revenue}', 52, 152, 219)
+pdf.add_metric_box('Total Revenue', '$' + str(int(total_revenue)), 52, 152, 219)
 
 pdf.set_xy(start_x + 95, start_y)
-pdf.add_metric_box('Growth Rate', f'{growth_rate}%', 46, 204, 113)
+pdf.add_metric_box('Growth Rate', str(round(growth_rate, 1)) + '%', 46, 204, 113)
 
 pdf.set_xy(start_x, start_y + 30)
-pdf.add_metric_box('Avg Profit Margin', f'{avg_margin}%', 155, 89, 182)
+pdf.add_metric_box('Avg Profit Margin', str(round(avg_margin, 1)) + '%', 155, 89, 182)
 
 pdf.set_xy(start_x + 95, start_y + 30)
 pdf.add_metric_box('Best Quarter', 'Q4 2024', 231, 76, 60)
@@ -427,9 +428,9 @@ pdf.add_section_title('📊 QUARTERLY REVENUE BREAKDOWN')
 for quarter, revenue in revenue_data.items():
     percentage = (revenue / total_revenue) * 100
     pdf.set_font('Arial', size=11)
-    pdf.cell(40, 8, f'{quarter}:', ln=False)
-    pdf.cell(60, 8, f'${revenue}', ln=False)
-    pdf.cell(0, 8, f'({percentage}% of total)', ln=True)
+    pdf.cell(40, 8, quarter + ':', ln=False)
+    pdf.cell(60, 8, '$' + str(revenue), ln=False)
+    pdf.cell(0, 8, '(' + str(round(percentage, 1)) + '% of total)', ln=True)
 
 pdf.ln(5)
 
@@ -440,7 +441,7 @@ for sector, margin in profit_margins.items():
     pdf.set_font('Arial', size=11)
     
     # Sector name
-    pdf.cell(60, 8, f'{sector}:', ln=False)
+    pdf.cell(60, 8, sector + ':', ln=False)
     
     # Progress bar effect
     pdf.set_fill_color(52, 152, 219)
@@ -449,7 +450,7 @@ for sector, margin in profit_margins.items():
     
     # Percentage
     pdf.cell(90, 8, '', ln=False)  # Space for bar
-    pdf.cell(0, 8, f'{margin}%', ln=True)
+    pdf.cell(0, 8, str(margin) + '%', ln=True)
 
 pdf.ln(8)
 
